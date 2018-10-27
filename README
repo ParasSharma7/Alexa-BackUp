@@ -1,0 +1,7 @@
+###################################################################################################
+# User Settings
+###################################################################################################
+0. Use `pip install -r requirements.txt` to install all dependencies (assuming you have Python).
+1. Alexa shall backup all content present in the directory where this folder is stored. 
+2. The working directory can be changed by editting the `settings.py` file.
+3. It is advisable to have a default bucket to upload to. This can be set in the `bucket` file.

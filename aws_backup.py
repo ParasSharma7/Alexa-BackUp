@@ -12,9 +12,11 @@ from settings import cfg
 # Program variables
 ###################################################################################################
 if(cfg['CWD']=='DEFAULT'):
-	cwd = get_cwd()
+	cwd = os.getcwd()
 else:
 	cwd = cfg['CWD']
+if(cfg['DOWNLOAD']=='DEFAULT'):
+	dld = os.getcwd()
 ###################################################################################################
 # End user variables
 ###################################################################################################
@@ -30,44 +32,58 @@ proxy_r = boto3.resource(
 	    aws_secret_access_key = '8oCvrfAYrW2V9FxVIQPdjn4H4Ke45AjHJ7iSPREJ',
 	    #aws_session_token=SESSION_TOKEN,
 		)
-s3_c = boto3.client(
-		's3',
-	    aws_access_key_id = 'AKIAJON5HWX7WVBLPTXQ',
-	    aws_secret_access_key = '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',
-	    #aws_session_token=SESSION_TOKEN,
-		)
-s3_r = boto3.resource(
-		's3',
-	    aws_access_key_id = 'AKIAJON5HWX7WVBLPTXQ',
-	    aws_secret_access_key = '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',
-	    #aws_session_token=SESSION_TOKEN,
-		)
-
 ###################################################################################################
 # End user interactions
 ###################################################################################################
 # The User's actual bucket for storage.
-def add_update_new_device(bucket):
+def add_update_new_device():
 	last_update = '0000'
 	passcode = input('Please enter your 8 letter passcode: ')
+	aws_access_key_id = input('Please enter your AWS access key ID: ')
+	aws_secret_access_key = input('Please enter your AWS secret access key: ')
+	bucket = input('Please enter your preffered bucket name: ')
+
+	s3_c = boto3.client(
+		's3',
+	    aws_access_key_id = aws_access_key_id,
+	    aws_secret_access_key = aws_secret_access_key,
+	    #aws_session_token=SESSION_TOKEN,
+		)
+	s3_r = boto3.resource(
+		's3',
+	    aws_access_key_id = aws_access_key_id,
+	    aws_secret_access_key = aws_secret_access_key,
+	    #aws_session_token=SESSION_TOKEN,
+		)
+	if_new_user('user', aws_access_key_id, aws_secret_access_key)
+
 	account = read_object(proxy_r, 'passcode-iiitd', passcode+".txt")
-	print('account', account)
+	print(account)
+	assert 1<0
 	if_backup = read_object(proxy_r, 'backup-iiitd', account+".txt")
+	
 	if(if_backup>last_update):
 		sync(s3_c, s3_r, bucket)
 		set_user_timestamp('user', if_backup)
 		set_user_account('user', account)
+		set_user_bucket('user', bucket)
 	else:
 		print('Already up to date...')
 
-def update_device(bucket):
-	timestamp = get_user_timestamp('user1')
-	account = get_user_account('user1')
+def update_device():
+	timestamp = get_user_timestamp('user')
+	account = get_user_account('user')
+	bucket = get_user_bucket('user')
+	id_key = get_user_cred('user')
+	print(id_key)
+	s3_c = set_client(id_key)
+	s3_r = set_resource(id_key)
+	print(account)
 	if_backup = read_object(proxy_r, 'backup-iiitd', account+".txt")
-	if(if_backup>last_update):
+	if(if_backup>timestamp):
 		sync(s3_c, s3_r, bucket)
-		set_user_timestamp('user1', if_backup)
-		set_user_account('user1', account)
+		set_user_timestamp('user', if_backup)
+		set_user_account('user', account)
 	else:
 		print('Already up to date...')	
 ###################################################################################################
@@ -83,6 +99,12 @@ def if_new_user(name, ID, key):
 	reset_working_dir(old_file_path)
 
 def make_cred_file(ID, key):
+	f = open("bucket", 'w')
+	f.close()
+	f = open("timestamp", 'w')
+	f.close()
+	f = open("account", 'w')
+	f.close()
 	f = open("credentials", "w")
 	f.write("[default]\naws_access_key_id = "+ID+"\naws_secret_access_key = "+key)
 	f.close()
@@ -106,50 +128,64 @@ def get_user_cred(input):
 			a = a.replace("\n", "")
 			id_key.append(a)
 
-	#print(id_key)	
-	#print(os.getcwd())
 	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return id_key
 
 def get_user_timestamp(input):
 	old_file_path = save_old_dir()
-	os.chdir('C:\\Users\\dell\\.aws\\'+input)
-	with open('timestamp.txt', 'r') as f:
-		timestamp = f.readlines()
+	os.chdir(cwd+'\\'+input)
+	with open('timestamp', 'r') as f:
+		timestamp = f.read()
 	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return timestamp
 
 def set_user_timestamp(input, timestamp):
 	old_file_path = save_old_dir()
-	os.chdir(cwd'\\'+input)
-	with open('timestamp.txt', 'w') as f:
+	os.chdir(cwd+'\\'+input)
+	with open('timestamp', 'w') as f:
 		f.write(timestamp)
 	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 
 def get_user_account(input):
 	old_file_path = save_old_dir()
-	os.chdir('C:\\Users\\dell\\.aws\\'+input)
-	with open('account.txt', 'r') as f:
-		account = f.readlines()
+	os.chdir(cwd+'\\'+input)
+	with open('account', 'r') as f:
+		account = f.read()
 	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return account
 
 def set_user_account(input, account):
 	old_file_path = save_old_dir()
-	os.chdir('C:\\Users\\dell\\.aws\\'+input)
-	with open('account.txt', 'w') as f:
+	os.chdir(cwd+'\\'+input)
+	with open('account', 'w') as f:
 		f.write(account)
 	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 
+def get_user_bucket(input):
+	old_file_path = save_old_dir()
+	os.chdir(cwd+'\\'+input)
+	with open('bucket', 'r') as f:
+		bucket = f.read()
+	print("Resetting working dir...")
+	reset_working_dir(old_file_path)
+	return bucket
+
+def set_user_bucket(input, bucket):
+	old_file_path = save_old_dir()
+	os.chdir(cwd+'\\'+input)
+	with open('bucket', 'w') as f:
+		f.write(bucket)
+	print("Resetting working dir...")
+	reset_working_dir(old_file_path)	
 ###################################################################################################
 # s3 Utility
 ###################################################################################################
-def set_client(input):
+def set_client(id_key):
 	client = boto3.client(
 	's3',
     aws_access_key_id = id_key[0],
@@ -158,7 +194,7 @@ def set_client(input):
 	)
 	return client
 
-def set_resource(input):
+def set_resource(id_key):
 	resource = boto3.resource(
     's3',
     aws_access_key_id = id_key[0],
@@ -195,22 +231,24 @@ def sync(s3_c, s3_r, bucket):
 	old_file_path = save_old_dir()
 	# traverse root directory, and list directories as dirs and files as files
 	#bucket = s3.Bucket(bucket)
-	for root, dirs, files in os.walk(get_cwd()+"\\test_folder"):
+	# THIS SHOULD BE cwd+"\\.."
+	for root, dirs, files in os.walk(cwd+"\\..\\test_folder"):
 		print('root', root)
 		print('dirs', dirs)
 		print('files', files)
 		path = root.split(os.sep)
 		print((len(path) - 1) * '---', os.path.basename(root))
 		for file in files:
-			#print(len(path) * '---', file)
-			print(path,file)
-			file_path = root
-			f = open(root+"\\"+file, 'r')
-			with open(root+"\\"+file, 'r'):	
-				#print(path+file)
-				contents = f.read()
-				print('Checking if file has been modified...')
-				check_and_update(s3_c, s3_r, file, contents, bucket, file_path)
+			if(root!=old_file_path):
+				#print(len(path) * '---', file)
+				print(path,file)
+				file_path = root
+				f = open(root+"\\"+file, 'r')
+				with open(root+"\\"+file, 'r'):	
+					#print(path+file)
+					contents = f.read()
+					print('Checking if file has been modified...')
+					check_and_update(s3_c, s3_r, file, contents, bucket, file_path)
 	print("Synced!")
 	reset_working_dir(old_file_path)
 
@@ -272,8 +310,7 @@ def upload(s3, filename, bucket, file_path):
 # Uses resource...
 def download(s3, filename, bucket):
 	old_file_path = save_old_dir()
-
-	download_dir = 'C:\\Users\\dell\\Downloads'
+	download_dir = dld
 	reset_working_dir(download_dir)
 	try:
 		print('Downloading...')
@@ -308,26 +345,3 @@ def parse_args():
 						default='default', type=str)
 	args = parser.parse_args()
 	return args
-
-if __name__ == '__main__':
-	
-	args = parse_args()
-
-	print('Called with args:')
-	print(args)
-
-
-	"""
-	id_key = get_user_cred(args.user)
-	s3_c = set_client(id_key)
-	s3_r = set_resource(id_key)
-	for bucket in s3_r.buckets.all():
-		print(bucket.name)
-	"""
-	#upload(s3_r, 'test_upload_2.txt', 'passcode-iiitd', get_cwd())
-	#download(s3_r, 'passcode-userb.txt', 'passcode-iiitd')
-	#print("Syncing...")
-	#sync(s3_c,s3_r,'bucketiiitd')
-	#print("Synced!")
-	#if_new_user('priyam', '22', 'B)
-	add_update_new_device('bucketiiitd')
