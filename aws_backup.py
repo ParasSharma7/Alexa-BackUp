@@ -232,7 +232,7 @@ def sync(s3_c, s3_r, bucket):
 	# traverse root directory, and list directories as dirs and files as files
 	#bucket = s3.Bucket(bucket)
 	# THIS SHOULD BE cwd+"\\.."
-	for root, dirs, files in os.walk(cwd+"\\..\\test_folder"):
+	for root, dirs, files in os.walk(cwd+"\\.."):
 		print('root', root)
 		print('dirs', dirs)
 		print('files', files)
