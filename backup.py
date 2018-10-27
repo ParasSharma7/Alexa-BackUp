@@ -7,7 +7,7 @@ if __name__ == '__main__':
 		ex = Backup()
 		sys.exit(app.exec_())
 		var_list = ex.pass1
-		assert 1<0
+		#assert 1<0
 		add_update_new_device()
 	while(True):
 		update_device()
