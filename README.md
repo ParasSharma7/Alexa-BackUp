@@ -6,12 +6,11 @@ A Alexa skill to back up your devices. You can add a new device  to back up or c
 
 1. Alexa shall backup all content present in the directory where this folder is stored. 
 
-2. The working directory can be changed by editting the `settings.py` file.
+2. The working directory can be changed by editting `cfg['CWD']` in the `settings.py` file.
 
-3. It is advisable to have a default bucket to upload to. This can be set in the `bucket` file.
+3. The download directory can be changed by editting `cfg['DOWNLOAD']` in the `settings.py` file.
 
-4. Ensure `cfg['B_BUCKET']` is modified. The value under it is a bucket meant to store timestamps of previous backups.
-
+4. It is advisable to have a default bucket to upload to. This can be set in the `.\user\bucket` file.
 
 ## GUI 
 1. Create a IAM account.
