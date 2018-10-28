@@ -80,10 +80,10 @@ def update_device():
 	bucket = get_user_bucket('user')
 	id_key = get_user_cred('user')
 	#passcode = get_user_passcode('user')
-	print(id_key)
+	#print(id_key)
 	s3_c = set_client(id_key)
 	s3_r = set_resource(id_key)
-	print(account)
+	#print(account)
 	if_backup = read_object(proxy_r, 'backup-iiitd', account+".txt")
 	if(if_backup>timestamp):
 		sync(s3_c, s3_r, bucket)
@@ -128,12 +128,12 @@ def get_user_cred(input):
 	for s in contents:
 		if 'aws_access_key_id' in s or 'aws_secret_access_key' in s:
 			a = s.split(" = ")
-			print(a)
+			#print(a)
 			a = a[1]
 			a = a.replace("\n", "")
 			id_key.append(a)
 
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return id_key
 
@@ -142,7 +142,7 @@ def get_user_timestamp(input):
 	os.chdir(cwd+'\\'+input)
 	with open('timestamp', 'r') as f:
 		timestamp = f.read()
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return timestamp
 
@@ -151,7 +151,7 @@ def set_user_timestamp(input, timestamp):
 	os.chdir(cwd+'\\'+input)
 	with open('timestamp', 'w') as f:
 		f.write(timestamp)
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 
 def get_user_account(input):
@@ -159,7 +159,7 @@ def get_user_account(input):
 	os.chdir(cwd+'\\'+input)
 	with open('account', 'r') as f:
 		account = f.read()
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return account
 
@@ -168,7 +168,7 @@ def set_user_account(input, account):
 	os.chdir(cwd+'\\'+input)
 	with open('account', 'w') as f:
 		f.write(account)
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 
 def get_user_bucket(input):
@@ -176,7 +176,7 @@ def get_user_bucket(input):
 	os.chdir(cwd+'\\'+input)
 	with open('bucket', 'r') as f:
 		bucket = f.read()
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return bucket
 
@@ -185,7 +185,7 @@ def set_user_bucket(input, bucket):
 	os.chdir(cwd+'\\'+input)
 	with open('bucket', 'w') as f:
 		f.write(bucket)
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)	
 
 def get_user_passcode(input):
@@ -193,7 +193,7 @@ def get_user_passcode(input):
 	os.chdir(cwd+'\\'+input)
 	with open('passcode', 'r') as f:
 		passcode = f.read()
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return passcode
 
@@ -202,7 +202,7 @@ def set_user_passcode(input, passcode):
 	os.chdir(cwd+'\\'+input)
 	with open('passcode', 'w') as f:
 		f.write(passcode)
-	print("Resetting working dir...")
+	#print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 ###################################################################################################
 # s3 Utility
@@ -227,7 +227,7 @@ def set_resource(id_key):
 # input from save_old_dir
 def reset_working_dir(input):
 	os.chdir(input)
-	print(os.getcwd())
+	#print(os.getcwd())
 
 def get_cwd():
 	return os.getcwd()
@@ -251,29 +251,29 @@ def save_old_dir():
 def sync(s3_c, s3_r, bucket):
 	print("Syncing...")
 	old_file_path = save_old_dir()
-	print('old path', old_file_path)
+	#print('old path', old_file_path)
 	# traverse root directory, and list directories as dirs and files as files
 	#bucket = s3.Bucket(bucket)
 	# THIS SHOULD BE cwd+"\\.."
 	os.chdir('..')
 	cwd_temp = os.getcwd()
 	for root, dirs, files in os.walk(cwd_temp):
-		print('root', root)
-		print('dirs', dirs)
-		print('files', files)
+		#print('root', root)
+		#print('dirs', dirs)
+		#print('files', files)
 		path = root.split(os.sep)
-		print((len(path) - 1) * '---', os.path.basename(root))
+		#print((len(path) - 1) * '---', os.path.basename(root))
 		for file in files:
 			print(root)
 			if(old_file_path not in root):
 				#print(len(path) * '---', file)
-				print(path,file)
+				#print(path,file)
 				file_path = root
 				f = open(root+"\\"+file, 'r')
 				with open(root+"\\"+file, 'r'):	
 					#print(path+file)
 					contents = f.read()
-					print('Checking if file has been modified...')
+					print('Checking if '+file+' has been modified...')
 					check_and_update(s3_c, s3_r, file, contents, bucket, file_path)
 	print("Synced!")
 	reset_working_dir(old_file_path)
@@ -282,11 +282,11 @@ def sync(s3_c, s3_r, bucket):
 def check_and_update(s3_c, s3_r, file, contents, bucket, file_path):
 	#print('bucket', bucket)
 	md5_file = hashlib.md5(contents.encode()).hexdigest()
-	print('md5_file', md5_file)
+	#print('md5_file', md5_file)
 
 	if(search_bucket(s3_r, file, bucket)):
 		md5_bucket = get_bucket_md5(s3_c, file, bucket)
-		print('md5_bucket', md5_bucket)
+		#print('md5_bucket', md5_bucket)
 		if(md5_file!=md5_bucket):
 			print('Updating files...')
 			print('File_path:', file_path)
@@ -295,7 +295,7 @@ def check_and_update(s3_c, s3_r, file, contents, bucket, file_path):
 			print('File not modified!')
 	else:
 		print('Updating files...')
-		print('File_path', file_path)
+		print('File_path: ', file_path)
 		upload(s3_r, file, bucket, file_path)
 
 def get_bucket_md5(s3_c, file, bucket):
@@ -310,10 +310,10 @@ def search_bucket(s3_r, file, bucket):
 	except botocore.exceptions.ClientError as e:
 	    if e.response['Error']['Code'] == "404":
 	        # The object does not exist.
-	        print("404 Not found...")
+	        print("New object found...", file)
 	    else:
 	        # Something else has gone wrong.
-	        print("Well, shit.")
+	        print("Fatal Encounter.")
 	        raise
 	    return False
 	else:
@@ -329,7 +329,7 @@ def upload(s3, filename, bucket, file_path):
 	os.chdir(file_path)
 	print("Uploading...")
 	s3.meta.client.upload_file(filename, bucket, filename)
-	print("Done uploading!")
+	print("File uploaded!")
 
 	reset_working_dir(old_file_path)
 
