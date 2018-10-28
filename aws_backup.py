@@ -38,12 +38,12 @@ proxy_r = boto3.resource(
 # End user interactions
 ###################################################################################################
 # The User's actual bucket for storage.
-def add_update_new_device():
+def add_update_new_device(arg_list):
 	last_update = '0000'
-	passcode = input('Please enter your 8 letter passcode: ')
-	aws_access_key_id = input('Please enter your AWS access key ID: ')
-	aws_secret_access_key = input('Please enter your AWS secret access key: ')
-	bucket = input('Please enter your preffered bucket name: ')
+	passcode = arg_list[3]
+	aws_access_key_id = arg_list[0]
+	aws_secret_access_key = arg_list[1]
+	bucket = arg_list[2]
 
 	s3_c = boto3.client(
 		's3',
