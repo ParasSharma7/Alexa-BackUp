@@ -1,0 +1,3 @@
+The credential files for this code have not been included in this repositary, as this is a public repositary. The rest of the code will work fine and a user does not need to actually run these codes, as they are being called from thier lambda occurances whenever required.
+
+If you were however trying to copy the repositary to understand it, please read the comments in the code when opening the credentials.txt file.
