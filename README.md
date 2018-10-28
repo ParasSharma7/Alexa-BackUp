@@ -18,9 +18,9 @@ First time users are required to enter the passcode in the GUI console as mentio
 4. It is advisable to have a default bucket to upload to. This can be set in the `.\user\bucket` file.
 
 ## GUI 
-1. Create a IAM account. For help refer to [this](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
+1. Create a IAM account. For help, refer to [this document](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
-2. Get your Access Key, Secret Access Key and Bucket Name.
+2. Get your Access Key, Secret Access Key and Bucket Name. The Bucket name will come from your AWS s3 account, and AWS Access Key and Secret Key from your AWS IAM.
 
 3. Run backup.py .
 
