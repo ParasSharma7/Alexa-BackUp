@@ -1,18 +1,18 @@
 import sys
+import threading
 from PyQt5.QtWidgets import (QWidget, QLabel, QLineEdit, 
     QTextEdit, QGridLayout, QApplication, QPushButton)
 
 
 class Backup(QWidget):
     
-    def _init_(self):
-        super()._init_()
-        
+    def __init__(self):
+        super(Backup,self).__init__()
+        self.pass1=""
         self.initUI()
-        
+
         
     def initUI(self):
-        
         self.ID_key = QLabel('ID Key')
         self.access_key = QLabel('Acess Key')
         self.Bucket = QLabel('Bucket Name')
@@ -22,7 +22,10 @@ class Backup(QWidget):
         self.access_keyEdit = QLineEdit()
         self.BucketEdit = QLineEdit()
         self.PasscodeEdit = QLineEdit()
-
+        self.ID_keyEdit.setEchoMode(QLineEdit.Password)
+        self.access_keyEdit.setEchoMode(QLineEdit.Password)
+        self.BucketEdit.setEchoMode(QLineEdit.Password)
+        self.PasscodeEdit.setEchoMode(QLineEdit.Password)
         Submit = QPushButton("Submit")
         
 
@@ -52,15 +55,9 @@ class Backup(QWidget):
         
     def on_click(self, btn):
         self.pass1=[self.ID_keyEdit.text(), self.access_keyEdit.text(), self.BucketEdit.text(), self.PasscodeEdit.text()]
-        print(pass1)
         if self.ID_keyEdit.text()!="" and self.access_keyEdit.text()!="" and self.BucketEdit.text()!="" and self.PasscodeEdit.text()!="" and len(self.PasscodeEdit.text())==8:
             self.close()
 
+    def getpass(self):
+        return self.pass1
     
-"""
-if _name_ == '_main_':
-    
-    app = QApplication(sys.argv)
-    ex = Backup()
-    sys.exit(app.exec_())
-"""
