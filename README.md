@@ -24,7 +24,7 @@ First time users are required to enter the passcode in the GUI console as mentio
 
 3. Run backup.py .
 
-4. Fill the ID, Access Key and Bucket Name with them respectively.
+4. Fill the ID (IAM access key), Access Key (IAM secret key) and Bucket Name with them respectively.
 
 5. Say to Alexa, `"Back me up"`.
 
