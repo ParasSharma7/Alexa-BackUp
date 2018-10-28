@@ -11,6 +11,6 @@ if __name__ == '__main__':
             var_list = ex.getpass()
             if(len(var_list)==4): 
                 add_update_new_device(var_list)
-                while(True):
-                    update_device()
-                    time.sleep(20)
+    while(True):
+        update_device()
+        time.sleep(20)
