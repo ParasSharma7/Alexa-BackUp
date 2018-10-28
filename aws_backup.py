@@ -8,6 +8,7 @@ import argparse
 import hashlib
 from pathlib import Path
 from settings import cfg
+import requests
 ###################################################################################################
 # Program variables
 ###################################################################################################
@@ -17,6 +18,7 @@ else:
 	cwd = cfg['CWD']
 if(cfg['DOWNLOAD']=='DEFAULT'):
 	dld = os.getcwd()
+URL = 'https://h1pkbtk97l.execute-api.ap-northeast-1.amazonaws.com/default/passcode1'
 ###################################################################################################
 # End user variables
 ###################################################################################################
@@ -56,10 +58,10 @@ def add_update_new_device():
 	    #aws_session_token=SESSION_TOKEN,
 		)
 	if_new_user('user', aws_access_key_id, aws_secret_access_key)
-
-	account = read_object(proxy_r, 'passcode-iiitd', passcode+".txt")
-	print(account)
-	assert 1<0
+	
+	PARAMS = {'passcode': passcode}
+	r = requests.get(url = URL, params = PARAMS)
+	account = r.json()
 	if_backup = read_object(proxy_r, 'backup-iiitd', account+".txt")
 	
 	if(if_backup>last_update):
@@ -67,6 +69,7 @@ def add_update_new_device():
 		set_user_timestamp('user', if_backup)
 		set_user_account('user', account)
 		set_user_bucket('user', bucket)
+		set_user_passcode('user', passcode)
 	else:
 		print('Already up to date...')
 
@@ -75,6 +78,7 @@ def update_device():
 	account = get_user_account('user')
 	bucket = get_user_bucket('user')
 	id_key = get_user_cred('user')
+	passcode = get_user_passcode('user')
 	print(id_key)
 	s3_c = set_client(id_key)
 	s3_r = set_resource(id_key)
@@ -182,6 +186,23 @@ def set_user_bucket(input, bucket):
 		f.write(bucket)
 	print("Resetting working dir...")
 	reset_working_dir(old_file_path)	
+
+def get_user_passcode(input):
+	old_file_path = save_old_dir()
+	os.chdir(cwd+'\\'+input)
+	with open('passcode', 'r') as f:
+		passcode = f.read()
+	print("Resetting working dir...")
+	reset_working_dir(old_file_path)
+	return passcode
+
+def set_user_passcode(input, passcode):
+	old_file_path = save_old_dir()
+	os.chdir(cwd+'\\'+input)
+	with open('passcode', 'w') as f:
+		f.write(passcode)
+	print("Resetting working dir...")
+	reset_working_dir(old_file_path)
 ###################################################################################################
 # s3 Utility
 ###################################################################################################
@@ -232,7 +253,7 @@ def sync(s3_c, s3_r, bucket):
 	# traverse root directory, and list directories as dirs and files as files
 	#bucket = s3.Bucket(bucket)
 	# THIS SHOULD BE cwd+"\\.."
-	for root, dirs, files in os.walk(cwd+"\\.."):
+	for root, dirs, files in os.walk(cwd+"\\..\\test_folder"):
 		print('root', root)
 		print('dirs', dirs)
 		print('files', files)
@@ -345,3 +366,6 @@ def parse_args():
 						default='default', type=str)
 	args = parser.parse_args()
 	return args
+
+if __name__ == '__main__':
+	add_update_new_device()
