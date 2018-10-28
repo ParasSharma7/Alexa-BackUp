@@ -20,11 +20,11 @@ First time users are required to enter the passcode in the GUI console as mentio
 ## GUI 
 1. Create a IAM account. For help, refer to [this document](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
-2. Get your Access Key, Secret Access Key and Bucket Name. The Bucket name will come from your AWS s3 account, and AWS Access Key and Secret Key from your AWS IAM.
+2. Get your Access Key, Secret Access Key and Bucket Name. The Bucket name will be from your AWS s3 account, and AWS Access Key and Secret Key will be from your AWS IAM.
 
 3. Run backup.py .
 
-4. Fill the ID (IAM access key), Access Key (IAM secret key) and Bucket Name with them respectively.
+4. Fill the ID, Access Key and Bucket Name fields with the above respectively.
 
 5. Say to Alexa, `"Back me up"`.
 
