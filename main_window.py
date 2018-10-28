@@ -57,9 +57,10 @@ class Backup(QWidget):
             self.close()
 
     
-
+"""
 if _name_ == '_main_':
     
     app = QApplication(sys.argv)
     ex = Backup()
     sys.exit(app.exec_())
+"""
