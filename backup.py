@@ -3,7 +3,7 @@ from aws_backup import *
 from main_window import *
 
 if __name__ == '__main__':
-    if not (os.path.isfile('user')):
+    if not (os.path.exists('user')):
         while(True):
             app = QApplication(sys.argv)
             ex = Backup()
