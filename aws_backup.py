@@ -18,6 +18,8 @@ else:
 	cwd = cfg['CWD']
 if(cfg['DOWNLOAD']=='DEFAULT'):
 	dld = os.getcwd()
+else:
+	dld = cfg['DOWNLOAD']
 URL_account = 'https://h1pkbtk97l.execute-api.ap-northeast-1.amazonaws.com/default/passcode1' # A bucket containing a dictionary of accounts and passcodes.
 URL_backup = 'https://i7jaxa2cp9.execute-api.ap-northeast-1.amazonaws.com/default/checkbackup' # A bucket containing a dictionary of backup timestamps.
 ###################################################################################################
