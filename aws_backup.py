@@ -44,15 +44,15 @@ def add_update_new_device(arg_list):
 	aws_access_key_id = arg_list[0]
 	aws_secret_access_key = arg_list[1]
 	bucket = arg_list[2]
-
+    
 	s3_c = boto3.client(
-		's3',
+		service_name = 's3',
 	    aws_access_key_id = aws_access_key_id,
 	    aws_secret_access_key = aws_secret_access_key,
 	    #aws_session_token=SESSION_TOKEN,
 		)
 	s3_r = boto3.resource(
-		's3',
+		service_name = 's3',
 	    aws_access_key_id = aws_access_key_id,
 	    aws_secret_access_key = aws_secret_access_key,
 	    #aws_session_token=SESSION_TOKEN,
@@ -63,7 +63,7 @@ def add_update_new_device(arg_list):
 	r = requests.get(url = URL, params = PARAMS)
 	account = r.json()
 	print('account name: ', account)
-	if_backup = read_object(proxy_r, cfg['B_BUCKET'], account+".txt")
+	if_backup = read_object(proxy_r, "backup-iiitd", account+".txt")
 	
 	if(if_backup>last_update):
 		sync(s3_c, s3_r, bucket)
