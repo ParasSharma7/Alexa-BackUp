@@ -13,8 +13,8 @@ class Backup(QWidget):
 
         
     def initUI(self):
-        self.ID_key = QLabel('ID Key')
-        self.access_key = QLabel('Access Key')
+        self.ID_key = QLabel('Access Key')
+        self.access_key = QLabel('Secret Key')
         self.Bucket = QLabel('Bucket Name')
         self.Passcode = QLabel('Passcode')
 
