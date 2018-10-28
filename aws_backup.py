@@ -62,7 +62,8 @@ def add_update_new_device():
 	PARAMS = {'passcode': passcode}
 	r = requests.get(url = URL, params = PARAMS)
 	account = r.json()
-	if_backup = read_object(proxy_r, 'backup-iiitd', account+".txt")
+	print('account name: ', account)
+	if_backup = read_object(proxy_r, cfg['B_BUCKET'], account+".txt")
 	
 	if(if_backup>last_update):
 		sync(s3_c, s3_r, bucket)
@@ -78,7 +79,7 @@ def update_device():
 	account = get_user_account('user')
 	bucket = get_user_bucket('user')
 	id_key = get_user_cred('user')
-	passcode = get_user_passcode('user')
+	#passcode = get_user_passcode('user')
 	print(id_key)
 	s3_c = set_client(id_key)
 	s3_r = set_resource(id_key)
@@ -250,17 +251,21 @@ def save_old_dir():
 def sync(s3_c, s3_r, bucket):
 	print("Syncing...")
 	old_file_path = save_old_dir()
+	print('old path', old_file_path)
 	# traverse root directory, and list directories as dirs and files as files
 	#bucket = s3.Bucket(bucket)
 	# THIS SHOULD BE cwd+"\\.."
-	for root, dirs, files in os.walk(cwd+"\\..\\test_folder"):
+	os.chdir('..')
+	cwd_temp = os.getcwd()
+	for root, dirs, files in os.walk(cwd_temp):
 		print('root', root)
 		print('dirs', dirs)
 		print('files', files)
 		path = root.split(os.sep)
 		print((len(path) - 1) * '---', os.path.basename(root))
 		for file in files:
-			if(root!=old_file_path):
+			print(root)
+			if(old_file_path not in root):
 				#print(len(path) * '---', file)
 				print(path,file)
 				file_path = root
@@ -369,3 +374,4 @@ def parse_args():
 
 if __name__ == '__main__':
 	add_update_new_device()
+	#update_device()
