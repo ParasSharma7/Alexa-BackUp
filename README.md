@@ -17,14 +17,16 @@ A Alexa skill to back up your devices. You can add a new device  to back up or c
 
 2. Get your Access Key, Secret Access Key and Bucket Name.
 
-3. Fill the ID, Access Key and Bucket Name with them respectively.
+3. Run backup.py .
 
-4. Say to Alexa, `"Back me up"`.
+4. Fill the ID, Access Key and Bucket Name with them respectively.
 
-5. If you are backing up a new device, ask Alexa to `"Add a new device"`.
+5. Say to Alexa, `"Back me up"`.
 
-6. Say to Alexa, `"The device name is {device Name}`"
+6. If you are backing up a new device, ask Alexa to `"Add a new device"`.
 
-7. Enter the Passcode given by Alexa in the Passcode field.
+7. Say to Alexa, `"The device name is {device Name}`"
 
-8. Submit the request.
+8. Enter the Passcode given by Alexa in the Passcode field.
+
+9. Submit the request.
