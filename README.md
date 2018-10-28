@@ -13,7 +13,7 @@ A Alexa skill to back up your devices. You can add a new device  to back up or c
 4. Ensure `cfg['B_BUCKET']` is modified.
 
 
-#GUI 
+## GUI 
 1. Create a IAM account.
 
 2. Get your Access Key, Secret Access Key and Bucket Name.
