@@ -18,7 +18,7 @@ A Alexa skill to back up your devices. You can add a new device  to back up or c
 
 2. Get your Access Key, Secret Access Key and Bucket Name.
 
-3. Fill the ID, Access Key and Bucket Name.
+3. Fill the ID, Access Key and Bucket Name with them respectively.
 
 4. Ask Alexa "Back me up",
 
