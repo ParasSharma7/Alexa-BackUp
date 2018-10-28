@@ -18,22 +18,8 @@ else:
 	cwd = cfg['CWD']
 if(cfg['DOWNLOAD']=='DEFAULT'):
 	dld = os.getcwd()
-URL = 'https://h1pkbtk97l.execute-api.ap-northeast-1.amazonaws.com/default/passcode1'
-###################################################################################################
-# End user variables
-###################################################################################################
-proxy_c = boto3.client(
-		's3',
-	    aws_access_key_id = 'AKIAIK5MTANAEZARXJIQ',
-	    aws_secret_access_key = '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',
-	    #aws_session_token=SESSION_TOKEN,
-		)
-proxy_r = boto3.resource(
-		's3',
-	    aws_access_key_id = 'AKIAIK5MTANAEZARXJIQ',
-	    aws_secret_access_key = '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',
-	    #aws_session_token=SESSION_TOKEN,
-		)
+URL_account = 'https://h1pkbtk97l.execute-api.ap-northeast-1.amazonaws.com/default/passcode1' # A bucket containing a dictionary of accounts and passcodes.
+URL_backup = 'https://i7jaxa2cp9.execute-api.ap-northeast-1.amazonaws.com/default/checkbackup' # A bucket containing a dictionary of backup timestamps.
 ###################################################################################################
 # End user interactions
 ###################################################################################################
@@ -44,7 +30,7 @@ def add_update_new_device(arg_list):
 	aws_access_key_id = arg_list[0]
 	aws_secret_access_key = arg_list[1]
 	bucket = arg_list[2]
-    
+
 	s3_c = boto3.client(
 		service_name = 's3',
 	    aws_access_key_id = aws_access_key_id,
@@ -59,11 +45,17 @@ def add_update_new_device(arg_list):
 		)
 	if_new_user('user', aws_access_key_id, aws_secret_access_key)
 	
-	PARAMS = {'passcode': passcode}
-	r = requests.get(url = URL, params = PARAMS)
-	account = r.json()
-	print('account name: ', account)
-	if_backup = read_object(proxy_r, "backup-iiitd", account+".txt")
+	PARAMS_a = {'passcode': passcode}
+	r_a = requests.get(url = URL_account, params = PARAMS_a)
+	account = r_a.json()
+	print('Account name: ', account)
+
+	PARAMS_b = {'passcode': passcode, 'account': account}
+	r_b = requests.get(url = URL_backup, params = PARAMS_b)
+	if_backup = r_b.json()
+	print('Last backup timestamp: ', if_backup)
+
+	#if_backup = read_object(proxy_r, cfg['B_BUCKET'], account+".txt")
 	
 	if(if_backup>last_update):
 		sync(s3_c, s3_r, bucket)
@@ -79,12 +71,17 @@ def update_device():
 	account = get_user_account('user')
 	bucket = get_user_bucket('user')
 	id_key = get_user_cred('user')
-	#passcode = get_user_passcode('user')
-	print(id_key)
+	passcode = get_user_passcode('user')
+	print('ID key: ', id_key)
+
 	s3_c = set_client(id_key)
 	s3_r = set_resource(id_key)
-	print(account)
-	if_backup = read_object(proxy_r, 'backup-iiitd', account+".txt")
+	print('Account: ', account)
+
+	PARAMS_b = {'passcode': passcode, 'account': account}
+	r_b = requests.get(url = URL_backup, params = PARAMS_b)
+	if_backup = r_b.json()
+
 	if(if_backup>timestamp):
 		sync(s3_c, s3_r, bucket)
 		set_user_timestamp('user', if_backup)
@@ -104,6 +101,8 @@ def if_new_user(name, ID, key):
 	reset_working_dir(old_file_path)
 
 def make_cred_file(ID, key):
+	f = open("passcode", 'w')
+	f.close()
 	f = open("bucket", 'w')
 	f.close()
 	f = open("timestamp", 'w')
@@ -273,7 +272,7 @@ def sync(s3_c, s3_r, bucket):
 				with open(root+"\\"+file, 'r'):	
 					#print(path+file)
 					contents = f.read()
-					print('Checking if file has been modified...')
+					print('Checking if '+file+' has been modified...')
 					check_and_update(s3_c, s3_r, file, contents, bucket, file_path)
 	print("Synced!")
 	reset_working_dir(old_file_path)
@@ -365,13 +364,13 @@ def parse_id_key():
 ###################################################################################################
 def parse_args():
 	parser = argparse.ArgumentParser()
-
 	# Set default profile for uploading? Last used account...
 	parser.add_argument('--user', dest='user',
 						default='default', type=str)
 	args = parser.parse_args()
 	return args
-
+"""
 if __name__ == '__main__':
-	add_update_new_device()
+	#add_update_new_device()
 	#update_device()
+"""
