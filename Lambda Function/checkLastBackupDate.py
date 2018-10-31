@@ -10,9 +10,10 @@ def lambda_handler(event, context):
     fil = open('credentials.txt','r')
     id_key = fil.readline()[:-1]
     sec_key = fil.readline()
-    proxy_r = boto3.resource('s3', aws_access_key_id = 'AKIAIK5MTANAEZARXJIQ',aws_secret_access_key = '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',)
+    proxy_r = boto3.resource('s3', aws_access_key_id = id_key,aws_secret_access_key = sec_key,)
     passcode = event['queryStringParameters']['passcode']
     account = read_object(proxy_r, 'passcode-iiitd', passcode+".txt")
+    print('savit',account)
     if(account != event['queryStringParameters']['account']):
         return {
         "statusCode": 200,
