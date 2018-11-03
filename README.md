@@ -1,10 +1,12 @@
 # Alexa-BackUp
-A Alexa skill to back up your devices. You can add a new device  to back up or choose from the existing list of the devices to back up.
+An Alexa skill to back up your devices. You can add a new device  to back up or choose from the existing list of the devices to back up.
 
 ## Usage
-You are required to leave the `backup.py` script running in the background. The script will periodically ping AWS and check for a backup instruction. 
+You are required to leave the `Alexa Backup` script running in the background. The script will periodically ping AWS and check for a backup instruction. 
 
 First time users are required to enter the passcode in the GUI console as mentioned below. Details will be stored on file.
+
+The code is a proof of concept, and will work properly on Windows OS only.
 
 ## User Settings
 0. Use `pip install -r requirements.txt` to install all dependencies (assuming you have Python).
@@ -22,7 +24,7 @@ First time users are required to enter the passcode in the GUI console as mentio
 
 2. Get your Access Key, Secret Access Key and Bucket Name. The Bucket name will be from your AWS s3 account, and AWS Access Key and Secret Key will be from your AWS IAM.
 
-3. Run backup.py .
+3. Open/Run `BackMeUp.bat`.
 
 4. Fill the Access Key, Secret Key and Bucket Name fields with the above respectively.
 
