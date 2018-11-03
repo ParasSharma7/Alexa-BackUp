@@ -4,7 +4,7 @@ An Alexa skill to back up your devices. You can add a new device  to back up or 
 ## Usage
 You are required to leave the `Alexa Backup` script running in the background. The script will periodically ping AWS and check for a backup instruction. 
 
-First time users are required to enter the passcode in the GUI console as mentioned below. Details will be stored on file.
+First time users are required to enter the passcode in the GUI console as mentioned below. Details will be stored on file. Afterwards, the script will start automatically when ever the user logs in his computer. You can also manually restart the script by opening/executing the `BackMeUp.bat` file.
 
 The code is a proof of concept, and will work properly on Windows OS only.
 
@@ -24,7 +24,7 @@ The code is a proof of concept, and will work properly on Windows OS only.
 
 2. Get your Access Key, Secret Access Key and Bucket Name. The Bucket name will be from your AWS s3 account, and AWS Access Key and Secret Key will be from your AWS IAM.
 
-3. Open/Run `BackMeUp.bat`.
+3. Open/Execute `BackMeUp.bat`.
 
 4. Fill the Access Key, Secret Key and Bucket Name fields with the above respectively.
 
