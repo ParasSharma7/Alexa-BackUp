@@ -3,3 +3,4 @@ botocore
 PyQt5
 requests
 json
+getpass
