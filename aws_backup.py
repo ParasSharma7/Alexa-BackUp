@@ -61,6 +61,7 @@ def add_update_new_device(arg_list):
 	
 	if(if_backup>last_update):
 		sync(s3_c, s3_r, bucket)
+		print('Setting User data...')
 		set_user_timestamp('user', if_backup)
 		set_user_account('user', account)
 		set_user_bucket('user', bucket)
@@ -74,8 +75,7 @@ def update_device():
 	bucket = get_user_bucket('user')
 	id_key = get_user_cred('user')
 	passcode = get_user_passcode('user')
-	print('ID key: ', id_key)
-
+	
 	s3_c = set_client(id_key)
 	s3_r = set_resource(id_key)
 	print('Account: ', account)
@@ -87,7 +87,6 @@ def update_device():
 	if(if_backup>timestamp):
 		sync(s3_c, s3_r, bucket)
 		set_user_timestamp('user', if_backup)
-		set_user_account('user', account)
 	else:
 		print('Already up to date...')	
 ###################################################################################################
@@ -129,7 +128,7 @@ def get_user_cred(input):
 	for s in contents:
 		if 'aws_access_key_id' in s or 'aws_secret_access_key' in s:
 			a = s.split(" = ")
-			print(a)
+			#print(a)
 			a = a[1]
 			a = a.replace("\n", "")
 			id_key.append(a)
@@ -143,7 +142,6 @@ def get_user_timestamp(input):
 	os.chdir(cwd+'\\'+input)
 	with open('timestamp', 'r') as f:
 		timestamp = f.read()
-	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return timestamp
 
@@ -152,7 +150,6 @@ def set_user_timestamp(input, timestamp):
 	os.chdir(cwd+'\\'+input)
 	with open('timestamp', 'w') as f:
 		f.write(timestamp)
-	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 
 def get_user_account(input):
@@ -160,7 +157,6 @@ def get_user_account(input):
 	os.chdir(cwd+'\\'+input)
 	with open('account', 'r') as f:
 		account = f.read()
-	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return account
 
@@ -169,7 +165,6 @@ def set_user_account(input, account):
 	os.chdir(cwd+'\\'+input)
 	with open('account', 'w') as f:
 		f.write(account)
-	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 
 def get_user_bucket(input):
@@ -177,7 +172,6 @@ def get_user_bucket(input):
 	os.chdir(cwd+'\\'+input)
 	with open('bucket', 'r') as f:
 		bucket = f.read()
-	print("Resetting working dir...")
 	reset_working_dir(old_file_path)
 	return bucket
 
@@ -186,7 +180,6 @@ def set_user_bucket(input, bucket):
 	os.chdir(cwd+'\\'+input)
 	with open('bucket', 'w') as f:
 		f.write(bucket)
-	print("Resetting working dir...")
 	reset_working_dir(old_file_path)	
 
 def get_user_passcode(input):
@@ -228,7 +221,7 @@ def set_resource(id_key):
 # input from save_old_dir
 def reset_working_dir(input):
 	os.chdir(input)
-	print(os.getcwd())
+	#print(os.getcwd())
 
 def get_cwd():
 	return os.getcwd()
