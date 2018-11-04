@@ -36,8 +36,6 @@ The code is a proof of concept, and will work properly on Windows OS only.
 
 8. If you are backing up a existing device, say `"Backup {device name}"`
 
-9. Run `backup.py` and fill in details of your AWS credentials and s3 storage bucket.
+9. Enter the Passcode given by Alexa in the Passcode field.
 
-10. Enter the Passcode given by Alexa in the Passcode field.
-
-11. Submit the request.
+10. Submit the request.
