@@ -6,7 +6,7 @@ You are required to leave the `Alexa Backup` script running in the background. T
 
 First time users are required to enter the passcode in the GUI console as mentioned below. Details will be stored on file. Afterwards, the script will start automatically when ever the user logs in his computer. You can also manually restart the script by opening/executing the `BackMeUp.bat` file.
 
-The code is a proof of concept, and will work properly on Windows OS only.
+The code is a proof of concept, and will work properly on Windows OS only. Non Windows Users can still use Alexa-Backup by commenting out [this line](https://github.com/ParasSharma7/Alexa-BackUp/blob/3714cb3fdc4d365d474cc3b2807eff37c7bbacce/backup.py#L17) in `backup.py`.
 
 ## User Settings
 0. Use `pip install -r requirements.txt` to install all dependencies (assuming you have Python).
